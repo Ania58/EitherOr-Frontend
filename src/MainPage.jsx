@@ -1,5 +1,5 @@
 
-const Header = () => {
+const MainPage = () => {
     return (
         <>
             <h1>Try out our Either Or Page</h1>
@@ -10,4 +10,4 @@ const Header = () => {
     )
 };
 
-export default Header;
+export default MainPage;
