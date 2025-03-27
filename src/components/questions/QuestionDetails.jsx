@@ -44,18 +44,33 @@ const QuestionDetails = () => {
         } catch (error) {
             console.error("Failed to cast a vote", error);
         }
-    }
+    };
 
     if (!question) return <p>Loading...</p>;
+
+    const totalVotes = question.votesOptionOne.length + question.votesOptionTwo.length;
+    const percentOptionOne = ((question.votesOptionOne.length / totalVotes) * 100).toFixed(1);
+    const percentOptionTwo = ((question.votesOptionTwo.length / totalVotes) * 100).toFixed(1);
 
     return (
         <div>
           <h1>Would you rather...</h1>
           <p>{question.optionOne} OR {question.optionTwo}</p>
-          <button onClick={() => setSelectedOption("optionOne")}>{question.optionOne}</button>
-          <button onClick={() => setSelectedOption("optionTwo")}>{question.optionTwo}</button>
-          <button onClick={handleVote} disabled={!selectedOption || hasVoted}>Submit Vote</button>
-
+          {!hasVoted ? (
+            <>
+            <button onClick={() => setSelectedOption("optionOne")} className={selectedOption === "optionOne" ? "selected" : ""}>{question.optionOne}</button>
+            <button onClick={() => setSelectedOption("optionTwo")} className={selectedOption === "optionTwo" ? "selected" : ""}>{question.optionTwo}</button>
+            <button onClick={handleVote} disabled={!selectedOption}>Submit Vote</button>
+            </>
+          ) : (
+            resultsVisible && (
+                <div>
+                    <p>You chose: <strong>{question[selectedOption]}</strong></p>
+                    <p>{question.optionOne}: {percentOptionOne}% ({question.votesOptionOne.length} votes)</p>
+                    <p>{question.optionTwo}: {percentOptionTwo}% ({question.votesOptionTwo.length} votes)</p>
+                </div>
+            )
+          )}
         </div>
       );
 };
