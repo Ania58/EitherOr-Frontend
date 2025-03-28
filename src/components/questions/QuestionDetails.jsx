@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import api from "../../api";
 
 
@@ -25,6 +25,12 @@ const QuestionDetails = () => {
 
         fetchQuestion();
     },[id]);
+
+    const navigate = useNavigate();
+
+    const handleEdit = () => {
+    navigate(`/questions/${id}/edit`);
+    };
 
     const handleVote = async () => {
 
@@ -71,6 +77,7 @@ const QuestionDetails = () => {
                 </div>
             )
           )}
+          <button onClick={handleEdit}>Edit Question</button>
         </div>
       );
 };
