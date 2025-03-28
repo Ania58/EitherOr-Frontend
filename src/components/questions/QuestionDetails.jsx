@@ -32,6 +32,10 @@ const QuestionDetails = () => {
     navigate(`/questions/${id}/edit`);
     };
 
+    const handleDelete = () => {
+        navigate(`/questions/${id}/delete`)
+    };
+
     const handleVote = async () => {
 
         if (!selectedOption) return;
@@ -78,6 +82,7 @@ const QuestionDetails = () => {
             )
           )}
           <button onClick={handleEdit}>Edit Question</button>
+          <button onClick={handleDelete}>Delete Question</button>
         </div>
       );
 };
