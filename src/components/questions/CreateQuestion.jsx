@@ -6,6 +6,7 @@ const CreateQuestion = () => {
 
     const [optionOne, setOptionOne] = useState("");
     const [optionTwo, setOptionTwo] = useState("");
+    const [message, setMessage] = useState("");
 
     const handleChangeOne = (e) => {
         setOptionOne(e.target.value);
@@ -27,6 +28,7 @@ const CreateQuestion = () => {
             console.log('Question created:', response.data);
             setOptionOne('');
             setOptionTwo('');
+            setMessage("Question created successfully!");
         } catch (error) {
             console.error('Error creating question:', error);
         };
@@ -41,6 +43,7 @@ const CreateQuestion = () => {
             <label>Write your option two:</label>
             <input type="text" value={optionTwo} onChange={handleChangeTwo} />
             <button type="submit">Create Question</button>
+            {message && <p>{message}</p>}
         </form>
     )
 };
