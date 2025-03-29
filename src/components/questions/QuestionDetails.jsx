@@ -14,6 +14,13 @@ const QuestionDetails = () => {
     const { id } = useParams();
 
     useEffect(() => {
+        if (!localStorage.getItem("voterId")) {
+          const newId = crypto.randomUUID(); 
+          localStorage.setItem("voterId", newId);
+        }
+      }, []);
+
+    useEffect(() => {
         const fetchQuestion = async () => {
             try {
                 const response = await api.get(`/questions/${id}`);
@@ -41,10 +48,12 @@ const QuestionDetails = () => {
 
         if (!selectedOption) return;
 
+        const voterId = localStorage.getItem("voterId");
+
         try {
-            const response = await api.post(`/questions/${id}/vote`, {
+            await api.post(`/questions/${id}/vote`, {
                 option: selectedOption,
-                voterId: "dummy123" 
+                voterId, 
               });
             setHasVoted(true);
             setResultsVisible(true);
@@ -64,14 +73,20 @@ const QuestionDetails = () => {
     };
 
     const handleWeirdVote = async () => {
+        const voterId = localStorage.getItem("voterId");
         try {
-            await api.post(`/questions/${id}/weird`);
+            await api.post(`/questions/${id}/weird`, { voterId });
             const updated = await api.get(`/questions/${id}`);
             setQuestion(updated.data)
             setHasMarkedWeird(true)
         } catch (error) {
-            console.error("Failed to mark as weird", error);
-        };
+            if (error.response && error.response.status === 403) {
+                alert("You’ve already marked this question as weird.");
+                setHasMarkedWeird(true);
+              } else {
+                console.error("Failed to mark as weird", error);
+              }
+        }
     };
 
     if (!question) return <p>Loading...</p>;
@@ -107,9 +122,13 @@ const QuestionDetails = () => {
           {question && (
                 <>
                     <p>🌀 Weird Votes: {question.weirdVotes}</p>
-                    <button onClick={handleWeirdVote} disabled={hasMarkedWeird}>
-                    😵‍💫 This is weird
-                    </button>
+                    {hasMarkedWeird ? (
+                        <p>😵‍💫 You’ve already marked this question as weird. Thanks for your honesty!</p>
+                    ) : (
+                        <button onClick={handleWeirdVote} disabled={hasMarkedWeird}>
+                        😵‍💫 This is weird
+                        </button>
+                    )}
                 </>
           )}
         </div>
