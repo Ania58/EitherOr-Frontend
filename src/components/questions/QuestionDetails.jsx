@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from "../../api";
+import CreateComment from '../comments/CreateComment';
 
 
 const QuestionDetails = () => {
@@ -131,6 +132,21 @@ const QuestionDetails = () => {
                     )}
                 </>
           )}
+          <div className="comment-section">
+            <CreateComment onCommentAdded={setComments} />
+            <h3>💬 Comments</h3>
+            {comments.length === 0 ? (
+                <p>😶 No comments yet. Be the first!</p>
+            ) : (
+                <ul>
+                    {comments.map((comment) => (
+                        <li key={comment._id}>
+                            <strong>{comment.user}:</strong> {comment.text}
+                        </li>
+                    ))}
+                </ul>
+            )}
+          </div>
         </div>
       );
 };

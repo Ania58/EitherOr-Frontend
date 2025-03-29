@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../api";
 
-const CreateComment = () => {
+const CreateComment = ({onCommentAdded}) => {
     const { id } = useParams();
     const [ commentText, setCommentText ] = useState("");
 
@@ -27,6 +27,9 @@ const CreateComment = () => {
                 text: commentText
             });
             setCommentText("");
+            if (onCommentAdded) {
+                onCommentAdded(response.data); 
+              }
         } catch (error) {
             console.error("Error adding comment", error);
         }
