@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from "../../api";
 import CreateComment from '../comments/CreateComment';
+import EditComments from '../comments/EditComment';
 
 
 const QuestionDetails = () => {
@@ -145,6 +146,11 @@ const QuestionDetails = () => {
                         </li>
                     ))}
                 </ul>
+            )}
+            {comments.some((c) => c.user === localStorage.getItem("voterId")) ? (
+                <EditComments onCommentUpdated={setComments} />
+            ) : (
+                <p>✏️ You haven’t posted a comment to edit yet.</p>
             )}
           </div>
         </div>
