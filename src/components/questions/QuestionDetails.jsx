@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import api from "../../api";
 import CreateComment from '../comments/CreateComment';
 import EditComments from '../comments/EditComment';
+import DeleteComment from '../comments/DeleteComment';
 
 
 const QuestionDetails = () => {
@@ -151,6 +152,11 @@ const QuestionDetails = () => {
                 <EditComments onCommentUpdated={setComments} />
             ) : (
                 <p>✏️ You haven’t posted a comment to edit yet.</p>
+            )}
+            {comments.some((c) => c.user === localStorage.getItem("voterId")) ? (
+                <DeleteComment onCommentDeleted={setComments} />
+            ) : (
+                <p>✏️ You haven’t posted a comment to delete yet.</p>
             )}
           </div>
         </div>
