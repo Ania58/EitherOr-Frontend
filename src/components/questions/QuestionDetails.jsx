@@ -8,6 +8,7 @@ const QuestionDetails = () => {
     const [selectedOption, setSelectedOption] = useState("");
     const [hasVoted, setHasVoted] = useState(false);
     const [resultsVisible, setResultsVisible] = useState(false);
+    const [hasMarkedWeird, setHasMarkedWeird] = useState(false);
     const [comments, setComments] = useState([]);
 
     const { id } = useParams();
@@ -52,8 +53,25 @@ const QuestionDetails = () => {
             setQuestion(updated.data);
 
         } catch (error) {
-            console.error("Failed to cast a vote", error);
+            if (error.response && error.response.status === 403) {
+                alert("You've already voted on this question!");
+                setHasVoted(true);
+                setResultsVisible(true); 
+            } else {
+                console.error("Failed to cast a vote", error);
+            }
         }
+    };
+
+    const handleWeirdVote = async () => {
+        try {
+            await api.post(`/questions/${id}/weird`);
+            const updated = await api.get(`/questions/${id}`);
+            setQuestion(updated.data)
+            setHasMarkedWeird(true)
+        } catch (error) {
+            console.error("Failed to mark as weird", error);
+        };
     };
 
     if (!question) return <p>Loading...</p>;
@@ -72,17 +90,28 @@ const QuestionDetails = () => {
             <button onClick={() => setSelectedOption("optionTwo")} className={selectedOption === "optionTwo" ? "selected" : ""}>{question.optionTwo}</button>
             <button onClick={handleVote} disabled={!selectedOption}>Submit Vote</button>
             </>
-          ) : (
-            resultsVisible && (
-                <div>
-                    <p>You chose: <strong>{question[selectedOption]}</strong></p>
-                    <p>{question.optionOne}: {percentOptionOne}% ({question.votesOptionOne.length} votes)</p>
-                    <p>{question.optionTwo}: {percentOptionTwo}% ({question.votesOptionTwo.length} votes)</p>
-                </div>
-            )
+            ) : (
+                <>
+                    <p>✅ You’ve already voted. Thank you!</p>
+                    {resultsVisible && (
+                        <div>
+                            <p>You chose: <strong>{question[selectedOption]}</strong></p>
+                            <p>{question.optionOne}: {percentOptionOne}% ({question.votesOptionOne.length} votes)</p>
+                            <p>{question.optionTwo}: {percentOptionTwo}% ({question.votesOptionTwo.length} votes)</p>
+                        </div>
+            )}
+                </>
           )}
           <button onClick={handleEdit}>Edit Question</button>
           <button onClick={handleDelete}>Delete Question</button>
+          {question && (
+                <>
+                    <p>🌀 Weird Votes: {question.weirdVotes}</p>
+                    <button onClick={handleWeirdVote} disabled={hasMarkedWeird}>
+                    😵‍💫 This is weird
+                    </button>
+                </>
+          )}
         </div>
       );
 };
