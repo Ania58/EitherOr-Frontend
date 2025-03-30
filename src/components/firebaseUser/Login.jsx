@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { auth } from "../../config/firebase";
 import {
   signInWithEmailAndPassword,
@@ -6,6 +6,7 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../contexts/UserContext";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -13,6 +14,7 @@ function Login() {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const { setUser } = useContext(UserContext); 
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -31,6 +33,7 @@ function Login() {
       const token = await user.getIdToken();
       localStorage.setItem("authToken", token);
 
+      setUser({ email: user.email, uid: user.uid }); 
       navigate("/questions");
     } catch (err) {
       console.error("Login error:", err);
@@ -54,6 +57,7 @@ function Login() {
       const token = await user.getIdToken();
 
       localStorage.setItem("authToken", token);
+      setUser({ email: user.email, uid: user.uid }); 
       navigate("/questions");
     } catch (err) {
       console.error("Google login error:", err);
@@ -124,3 +128,4 @@ function Login() {
 }
 
 export default Login;
+

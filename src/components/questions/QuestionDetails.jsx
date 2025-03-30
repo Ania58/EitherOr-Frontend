@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from "../../api";
+import { auth } from "../../config/firebase";
 import CreateComment from '../comments/CreateComment';
 import EditComment from '../comments/EditComment';
 import DeleteComment from '../comments/DeleteComment';
@@ -54,7 +55,8 @@ const QuestionDetails = () => {
 
         if (!selectedOption) return;
 
-        const voterId = localStorage.getItem("voterId");
+        const firebaseUser = auth.currentUser;
+        const voterId = firebaseUser?.uid || localStorage.getItem("voterId");
 
         try {
             await api.post(`/questions/${id}/vote`, {
@@ -79,7 +81,8 @@ const QuestionDetails = () => {
     };
 
     const handleWeirdVote = async () => {
-        const voterId = localStorage.getItem("voterId");
+        const firebaseUser = auth.currentUser;
+        const voterId = firebaseUser?.uid || localStorage.getItem("voterId");
         try {
             await api.post(`/questions/${id}/weird`, { voterId });
             const updated = await api.get(`/questions/${id}`);
@@ -147,32 +150,36 @@ const QuestionDetails = () => {
                     {editMessage && <p style={{ color: "green" }}>{editMessage}</p>}
                     {deleteMessage && <p style={{ color: "red" }}>{deleteMessage}</p>}
                     <ul>
-                        {comments.map((comment) => (
-                            <li key={comment._id}>
-                                <strong>{comment.user}:</strong> {comment.text}
-                                {comment.user === localStorage.getItem("voterId") && (
-                                <>
-                                    <EditComment
-                                    commentId={comment._id}
-                                    initialText={comment.text}
-                                    onCommentUpdated={setComments}
-                                    onNotifyEdit={() => {
-                                        setEditMessage("✏️ Your comment was updated.");
-                                        setTimeout(() => setEditMessage(""), 3000);
-                                      }}
-                                    />
-                                    <DeleteComment
-                                    commentId={comment._id}
-                                    onCommentDeleted={setComments}
-                                    onNotifyDelete={() => {
-                                    setDeleteMessage("🗑️ Your comment was deleted.");
-                                    setTimeout(() => setDeleteMessage(""), 3000);
-                                    }}
-                                    />
-                                </>
-                                )}
-                            </li>
-                        ))}
+                        {comments.map((comment) => {
+                            const firebaseUser = auth.currentUser;
+                            const currentUserId = firebaseUser?.uid || localStorage.getItem("voterId");
+                            return (
+                                <li key={comment._id}>
+                                    <strong>{comment.user}:</strong> {comment.text}
+                                    {comment.user === currentUserId && (
+                                        <>
+                                        <EditComment
+                                            commentId={comment._id}
+                                            initialText={comment.text}
+                                            onCommentUpdated={setComments}
+                                            onNotifyEdit={() => {
+                                            setEditMessage("✏️ Your comment was updated.");
+                                            setTimeout(() => setEditMessage(""), 3000);
+                                            }}
+                                        />
+                                        <DeleteComment
+                                            commentId={comment._id}
+                                            onCommentDeleted={setComments}
+                                            onNotifyDelete={() => {
+                                            setDeleteMessage("🗑️ Your comment was deleted.");
+                                            setTimeout(() => setDeleteMessage(""), 3000);
+                                            }}
+                                        />
+                                        </>
+                                    )}
+                                </li>
+                            );
+                        })}
                     </ul>
                 </>
             )}

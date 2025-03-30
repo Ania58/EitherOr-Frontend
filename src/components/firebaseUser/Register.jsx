@@ -37,7 +37,7 @@ function Register() {
       if (user.emailVerified) {
         clearInterval(interval);
         setSuccessMessage("✅ Email verified! You can now log in.");
-        navigate("/login");
+        navigate("/questions");
       }
     }, 3000);
 
@@ -68,6 +68,8 @@ function Register() {
 
       const token = await user.getIdToken();
       localStorage.setItem("authToken", token);
+      setUser({ email: user.email, uid: user.uid });
+
 
       setSuccessMessage("📩 Registration successful! Please verify your email.");
       setIsRegistrationComplete(true);
@@ -89,8 +91,9 @@ function Register() {
       const token = await user.getIdToken();
 
       localStorage.setItem("authToken", token);
+      setUser({ email: user.email, uid: user.uid });
       setSuccessMessage("✅ Registered with Google! You can now log in.");
-      navigate("/login");
+      navigate("/questions");
     } catch (err) {
       console.error("Google registration error:", err);
       setError("❌ Google registration failed.");

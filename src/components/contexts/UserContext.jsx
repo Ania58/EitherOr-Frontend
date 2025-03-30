@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from "react";
-import api from "../../api";
+import { auth } from "../../config/firebase";
 
 export const UserContext = createContext();
 
@@ -8,28 +8,31 @@ const UserProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUser = async () => {
+    const checkUser = async () => {
       setLoading(true);
-      const token = localStorage.getItem("authToken");
+      const currentUser = auth.currentUser;
 
-      if (token) {
+      if (currentUser) {
         try {
-          const response = await api.get("/profile", {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          setUser(response.data);
+          await currentUser.reload();
+          if (currentUser.emailVerified) {
+            setUser({ email: currentUser.email, uid: currentUser.uid });
+          } else {
+            setUser(null);
+          }
         } catch (error) {
-          console.error("Error fetching user:", error);
-          setUser(null); 
+          console.error("Error checking user:", error);
+          setUser(null);
         }
       } else {
-        setUser(null); 
+        setUser(null);
       }
+
       setLoading(false);
     };
 
-    fetchUser();
-  }, []); 
+    checkUser();
+  }, []);
 
   return (
     <UserContext.Provider value={{ user, setUser, loading }}>
@@ -38,4 +41,4 @@ const UserProvider = ({ children }) => {
   );
 };
 
-export default UserProvider; 
+export default UserProvider;
