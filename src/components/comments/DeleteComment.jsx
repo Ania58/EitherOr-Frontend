@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../api";
+import { UserContext } from "../contexts/UserContext";
 
 const DeleteComment = ({commentId, onCommentDeleted, onNotifyDelete}) => {
     const { id } = useParams();
     const [confirming, setConfirming] = useState(false);
+    const { user } = useContext(UserContext);
 
     useEffect(() => {
         if (!localStorage.getItem("voterId")) {
@@ -13,7 +15,7 @@ const DeleteComment = ({commentId, onCommentDeleted, onNotifyDelete}) => {
         }
         }, []);
     
-        const CommentorId = localStorage.getItem("voterId");
+        const commentorId = user?.uid || localStorage.getItem("voterId");
 
     const deleteComment = async (e) => {
         e.preventDefault();
@@ -21,7 +23,7 @@ const DeleteComment = ({commentId, onCommentDeleted, onNotifyDelete}) => {
            const response = await api.delete(`/questions/${id}/comments`, {
             data: {
                 commentId,
-                user: CommentorId
+                user: commentorId
             }
            });
            if (onCommentDeleted) {

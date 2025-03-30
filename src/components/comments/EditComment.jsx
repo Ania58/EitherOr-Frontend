@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../api";
+import { UserContext } from "../contexts/UserContext"; 
 
 
 const EditComment = ({commentId, onCommentUpdated, initialText, onNotifyEdit}) => {
     const { id } = useParams();
     const [ updateComment, setUpdateComment ] = useState(initialText || "");
+    const { user } = useContext(UserContext);
 
     useEffect(() => {
         if (!localStorage.getItem("voterId")) {
@@ -14,7 +16,7 @@ const EditComment = ({commentId, onCommentUpdated, initialText, onNotifyEdit}) =
         }
     }, []);
 
-    const CommentorId = localStorage.getItem("voterId");
+    const commentorId = user?.uid || localStorage.getItem("voterId");
 
     const handleChange = (e) => {
         setUpdateComment(e.target.value)
@@ -26,7 +28,7 @@ const EditComment = ({commentId, onCommentUpdated, initialText, onNotifyEdit}) =
             const response = await api.put(`/questions/${id}/comments`, {
                 commentId, 
                 text: updateComment, 
-                user: CommentorId
+                user: commentorId
             });
             setUpdateComment("");
             if (onCommentUpdated) {
