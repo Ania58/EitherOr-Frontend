@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../api";
+import { UserContext } from "../contexts/UserContext";
+
 
 const CreateComment = ({onCommentAdded}) => {
     const { id } = useParams();
     const [ commentText, setCommentText ] = useState("");
+    const { user } = useContext(UserContext); 
 
      useEffect(() => {
             if (!localStorage.getItem("voterId")) {
@@ -19,11 +22,11 @@ const CreateComment = ({onCommentAdded}) => {
 
     const addComment = async (e) => {
         e.preventDefault();
-        const CommentorId = localStorage.getItem("voterId");
+        const commentorId = user?.uid || localStorage.getItem("voterId");
        
         try {
             const response = await api.post(`/questions/${id}/comments`,{
-                user: CommentorId, 
+                user: commentorId, 
                 text: commentText
             });
             setCommentText("");
