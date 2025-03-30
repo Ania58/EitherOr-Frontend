@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { auth } from "../../config/firebase";
 import {
   createUserWithEmailAndPassword,
@@ -7,6 +7,7 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../contexts/UserContext";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -19,6 +20,8 @@ function Register() {
   const [isGoogleRegister, setIsGoogleRegister] = useState(false);
   const [isRegistrationComplete, setIsRegistrationComplete] = useState(false);
   const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
+
 
   const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*~()\-_+=\/[\]{}\\|;:'"<>,.?])(?=.{7,})/;
 
