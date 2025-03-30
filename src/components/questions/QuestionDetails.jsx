@@ -155,7 +155,7 @@ const QuestionDetails = () => {
                             const currentUserId = firebaseUser?.uid || localStorage.getItem("voterId");
                             return (
                                 <li key={comment._id}>
-                                    <strong>{comment.user}:</strong> {comment.text}
+                                    <strong>{comment.name || comment.user}:</strong> {comment.text}
                                     {comment.user === currentUserId && (
                                         <>
                                         <EditComment

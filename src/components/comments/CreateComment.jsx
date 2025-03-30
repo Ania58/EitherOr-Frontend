@@ -25,10 +25,18 @@ const CreateComment = ({onCommentAdded}) => {
         const commentorId = user?.uid || localStorage.getItem("voterId");
        
         try {
-            const response = await api.post(`/questions/${id}/comments`,{
-                user: commentorId, 
-                text: commentText
-            });
+            const response = await api.post(`/questions/${id}/comments`,
+                {
+                    user: commentorId, 
+                    name: user?.displayName || user?.email?.split("@")[0] || "Anonymous",
+                    text: commentText
+                },
+                {
+                    headers: {
+                    Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+                    }
+                }   
+            );
             setCommentText("");
             if (onCommentAdded) {
                 onCommentAdded(response.data); 
