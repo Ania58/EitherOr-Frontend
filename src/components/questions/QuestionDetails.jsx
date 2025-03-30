@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from "../../api";
 import CreateComment from '../comments/CreateComment';
-import EditComments from '../comments/EditComment';
+import EditComment from '../comments/EditComment';
 import DeleteComment from '../comments/DeleteComment';
 
 
@@ -13,6 +13,9 @@ const QuestionDetails = () => {
     const [resultsVisible, setResultsVisible] = useState(false);
     const [hasMarkedWeird, setHasMarkedWeird] = useState(false);
     const [comments, setComments] = useState([]);
+    const [editMessage, setEditMessage] = useState("");
+    const [deleteMessage, setDeleteMessage] = useState("");
+
 
     const { id } = useParams();
 
@@ -140,27 +143,42 @@ const QuestionDetails = () => {
             {comments.length === 0 ? (
                 <p>😶 No comments yet. Be the first!</p>
             ) : (
-                <ul>
-                    {comments.map((comment) => (
-                        <li key={comment._id}>
-                            <strong>{comment.user}:</strong> {comment.text}
-                        </li>
-                    ))}
-                </ul>
-            )}
-            {comments.some((c) => c.user === localStorage.getItem("voterId")) ? (
-                <EditComments onCommentUpdated={setComments} />
-            ) : (
-                <p>✏️ You haven’t posted a comment to edit yet.</p>
-            )}
-            {comments.some((c) => c.user === localStorage.getItem("voterId")) ? (
-                <DeleteComment onCommentDeleted={setComments} />
-            ) : (
-                <p>✏️ You haven’t posted a comment to delete yet.</p>
+                <>
+                    {editMessage && <p style={{ color: "green" }}>{editMessage}</p>}
+                    {deleteMessage && <p style={{ color: "red" }}>{deleteMessage}</p>}
+                    <ul>
+                        {comments.map((comment) => (
+                            <li key={comment._id}>
+                                <strong>{comment.user}:</strong> {comment.text}
+                                {comment.user === localStorage.getItem("voterId") && (
+                                <>
+                                    <EditComment
+                                    commentId={comment._id}
+                                    initialText={comment.text}
+                                    onCommentUpdated={setComments}
+                                    onNotifyEdit={() => {
+                                        setEditMessage("✏️ Your comment was updated.");
+                                        setTimeout(() => setEditMessage(""), 3000);
+                                      }}
+                                    />
+                                    <DeleteComment
+                                    commentId={comment._id}
+                                    onCommentDeleted={setComments}
+                                    onNotifyDelete={() => {
+                                    setDeleteMessage("🗑️ Your comment was deleted.");
+                                    setTimeout(() => setDeleteMessage(""), 3000);
+                                    }}
+                                    />
+                                </>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                </>
             )}
           </div>
         </div>
-      );
+    );
 };
 
 export default QuestionDetails;

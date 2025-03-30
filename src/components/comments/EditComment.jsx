@@ -3,10 +3,9 @@ import { useParams } from "react-router-dom";
 import api from "../../api";
 
 
-const EditComments = ({onCommentUpdated}) => {
+const EditComment = ({commentId, onCommentUpdated, initialText, onNotifyEdit}) => {
     const { id } = useParams();
-    const [ commentId, setCommentId ] = useState("");
-    const [ updateComment, setUpdateComment ] = useState("");
+    const [ updateComment, setUpdateComment ] = useState(initialText || "");
 
     useEffect(() => {
         if (!localStorage.getItem("voterId")) {
@@ -16,25 +15,6 @@ const EditComments = ({onCommentUpdated}) => {
     }, []);
 
     const CommentorId = localStorage.getItem("voterId");
-
-    useEffect(() => {
-        const fetchComments = async () => {
-            try {
-                const response = await api.get(`/questions/${id}/comments`);
-                const myComment = response.data.find(
-                    (c) => c.user === CommentorId
-                  );
-          
-                  if (myComment) {
-                    setCommentId(myComment._id);
-                    setUpdateComment(myComment.text);
-                  }
-            } catch (error) {
-                console.error("Error fetching comments", error);  
-            }
-        }
-        fetchComments();
-    },[id, CommentorId]);
 
     const handleChange = (e) => {
         setUpdateComment(e.target.value)
@@ -52,6 +32,9 @@ const EditComments = ({onCommentUpdated}) => {
             if (onCommentUpdated) {
                 onCommentUpdated(response.data.comments); 
               };
+            if (onNotifyEdit) {
+                onNotifyEdit(); 
+            };
         } catch (error) {
             console.error("Error updating comment", error);
         }
@@ -59,12 +42,11 @@ const EditComments = ({onCommentUpdated}) => {
 
     return (
         <form onSubmit={editComment}>
-            <h3>Edit your comment</h3>
-            <input type="text" value={updateComment} onChange={handleChange} />
+            <input type="text" value={updateComment} onChange={handleChange} placeholder="Edit your comment" />
             <button type="submit">Edit</button>
         </form>
     );
 
 };
 
-export default EditComments;
+export default EditComment;

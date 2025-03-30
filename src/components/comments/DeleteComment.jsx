@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../api";
 
-const DeleteComment = ({onCommentDeleted}) => {
+const DeleteComment = ({commentId, onCommentDeleted, onNotifyDelete}) => {
     const { id } = useParams();
-    const [ commentId, setCommentId ] = useState("");
+    const [confirming, setConfirming] = useState(false);
 
     useEffect(() => {
         if (!localStorage.getItem("voterId")) {
@@ -14,24 +14,6 @@ const DeleteComment = ({onCommentDeleted}) => {
         }, []);
     
         const CommentorId = localStorage.getItem("voterId");
-
-    useEffect(() => {
-        const fetchComments = async () => {
-            try {
-                const response = await api.get(`/questions/${id}/comments`);
-                const myComment = response.data.find(
-                    (c) => c.user === CommentorId
-                );
-                  
-                if (myComment) {
-                    setCommentId(myComment._id);
-                }
-            } catch (error) {
-                    console.error("Error fetching comments", error);  
-            }
-        }
-            fetchComments();
-    },[id, CommentorId]);
 
     const deleteComment = async (e) => {
         e.preventDefault();
@@ -45,16 +27,23 @@ const DeleteComment = ({onCommentDeleted}) => {
            if (onCommentDeleted) {
             onCommentDeleted(response.data.comments); 
           }; 
+          if (onNotifyDelete) {
+            onNotifyDelete();
+          }
+          setConfirming(false);
         } catch (error) {
             console.error("Error deleting comment");
         }
     };
-     return (
-        <form onSubmit={deleteComment}>
-            <h3>Are you sure you want to delete your comment?</h3>
-            <button type="submit">Yes, delete</button>
-        </form>
-     );
+    return confirming ? (
+        <div>
+          <p>Are you sure you want to delete your comment?</p>
+          <button onClick={deleteComment}>✅ Yes, delete</button>{" "}
+          <button onClick={() => setConfirming(false)}>❌ Cancel</button>
+        </div>
+      ) : (
+        <button onClick={() => setConfirming(true)}>🗑 Delete</button>
+      );
 };
 
 export default DeleteComment;
