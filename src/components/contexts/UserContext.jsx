@@ -1,37 +1,30 @@
 import { createContext, useState, useEffect } from "react";
 import { auth } from "../../config/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
 export const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
-    const checkUser = async () => {
-      setLoading(true);
-      const currentUser = auth.currentUser;
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      setLoading(true); 
 
-      if (currentUser) {
-        try {
-          await currentUser.reload();
-          if (currentUser.emailVerified) {
-            setUser({ email: currentUser.email, uid: currentUser.uid });
-          } else {
-            setUser(null);
-          }
-        } catch (error) {
-          console.error("Error checking user:", error);
-          setUser(null);
-        }
+      if (firebaseUser && firebaseUser.emailVerified) {
+        const token = await firebaseUser.getIdToken();
+        localStorage.setItem("authToken", token);
+        setUser({ email: firebaseUser.email, uid: firebaseUser.uid, displayName: firebaseUser.displayName || null });
       } else {
+        localStorage.removeItem("authToken");
         setUser(null);
       }
 
-      setLoading(false);
-    };
+      setLoading(false); 
+    });
 
-    checkUser();
+    return () => unsubscribe(); 
   }, []);
 
   return (

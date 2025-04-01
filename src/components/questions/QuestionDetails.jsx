@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from "../../api";
-import { auth } from "../../config/firebase";
 import CreateComment from '../comments/CreateComment';
 import EditComment from '../comments/EditComment';
 import DeleteComment from '../comments/DeleteComment';
+import { UserContext } from "../contexts/UserContext";
 
 
 const QuestionDetails = () => {
@@ -19,6 +19,9 @@ const QuestionDetails = () => {
 
 
     const { id } = useParams();
+
+    const { user, loading } = useContext(UserContext);
+    const currentUserId = !loading && (user?.uid || localStorage.getItem("voterId"));
 
     useEffect(() => {
         if (!localStorage.getItem("voterId")) {
@@ -55,8 +58,7 @@ const QuestionDetails = () => {
 
         if (!selectedOption) return;
 
-        const firebaseUser = auth.currentUser;
-        const voterId = firebaseUser?.uid || localStorage.getItem("voterId");
+        const voterId = currentUserId;
 
         try {
             await api.post(`/questions/${id}/vote`, {
@@ -81,8 +83,8 @@ const QuestionDetails = () => {
     };
 
     const handleWeirdVote = async () => {
-        const firebaseUser = auth.currentUser;
-        const voterId = firebaseUser?.uid || localStorage.getItem("voterId");
+       
+       const voterId = currentUserId;
         try {
             await api.post(`/questions/${id}/weird`, { voterId });
             const updated = await api.get(`/questions/${id}`);
@@ -151,8 +153,6 @@ const QuestionDetails = () => {
                     {deleteMessage && <p style={{ color: "red" }}>{deleteMessage}</p>}
                     <ul>
                         {comments.map((comment) => {
-                            const firebaseUser = auth.currentUser;
-                            const currentUserId = firebaseUser?.uid || localStorage.getItem("voterId");
                             return (
                                 <li key={comment._id}>
                                     <strong>{comment.name || comment.user}:</strong> {comment.text}
