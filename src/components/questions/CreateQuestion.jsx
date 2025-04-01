@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from "../../api";
+import GoBackButton from '../buttons/GoBackButton';
 
 
 const CreateQuestion = () => {
@@ -49,6 +50,7 @@ const CreateQuestion = () => {
 
     return (
         <form onSubmit={handleSubmit}>
+             <GoBackButton />
             <h1>Create your Either/Or Question</h1>
             <h2>Would you rather:</h2>
             <label>Write your option one:</label>

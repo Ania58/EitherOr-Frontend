@@ -5,6 +5,7 @@ import CreateComment from '../comments/CreateComment';
 import EditComment from '../comments/EditComment';
 import DeleteComment from '../comments/DeleteComment';
 import { UserContext } from "../contexts/UserContext";
+import GoBackButton from "../buttons/GoBackButton";
 
 
 const QuestionDetails = () => {
@@ -108,6 +109,7 @@ const QuestionDetails = () => {
 
     return (
         <div>
+             <GoBackButton />
           <h1>Would you rather...</h1>
           <p>{question.optionOne} OR {question.optionTwo}</p>
           {!hasVoted ? (

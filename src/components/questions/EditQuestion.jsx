@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from "../../api";
+import GoBackButton from '../buttons/GoBackButton';
 
 const EditQuestion = () => {
     const [ optionOne, setOptionOne ] = useState("");
@@ -64,6 +65,7 @@ const EditQuestion = () => {
 
     return (
         <form onSubmit={handleSubmit}>
+             <GoBackButton />
             <h1>Edit your Either/Or Question</h1>
             <h2>Would you rather:</h2>
             <label>Edit your option one:</label>
