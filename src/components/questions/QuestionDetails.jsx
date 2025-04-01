@@ -23,6 +23,8 @@ const QuestionDetails = () => {
 
     const { user, loading } = useContext(UserContext);
     const currentUserId = !loading && (user?.uid || localStorage.getItem("voterId"));
+    const isCreator = !loading && user && question?.creator === user.uid;
+
 
     useEffect(() => {
         if (!localStorage.getItem("voterId")) {
@@ -130,8 +132,12 @@ const QuestionDetails = () => {
             )}
                 </>
           )}
-          <button onClick={handleEdit}>Edit Question</button>
-          <button onClick={handleDelete}>Delete Question</button>
+          {isCreator && (
+            <>
+                <button onClick={handleEdit}>Edit Question</button>
+                <button onClick={handleDelete}>Delete Question</button>
+            </>
+          )}
           {question && (
                 <>
                     <p>🌀 Weird Votes: {question.weirdVotes}</p>
