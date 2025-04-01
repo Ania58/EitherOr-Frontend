@@ -8,6 +8,8 @@ const DeleteQuestion = () => {
     const [success, setSuccess] = useState(false);
 
     useEffect(() => {
+        if (!id) return;
+
         const confirmDeletion = async () => {
             const confirm = window.confirm("Are you sure you want to delete this question? This action is irreversible");
 
@@ -17,7 +19,11 @@ const DeleteQuestion = () => {
             };
 
             try {
-                await api.delete(`/questions/${id}`);
+                await api.delete(`/questions/${id}/delete`, {
+                    headers: {
+                      Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+                    },
+                  });
                 setSuccess(true);
                 setTimeout(() => navigate("/questions"), 1500);
             } catch (error) {

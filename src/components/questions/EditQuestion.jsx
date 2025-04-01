@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import api from "../../api";
 
 const EditQuestion = () => {
@@ -7,8 +7,10 @@ const EditQuestion = () => {
     const [ optionTwo, setOptionTwo ] = useState("");
     const [ updateOptionOne, setUpdateOptionOne ] = useState("");
     const [ updateOptionTwo, setUpdateOptionTwo ] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
 
     const { id } = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchQuestion = async () => {
@@ -44,7 +46,15 @@ const EditQuestion = () => {
           };
 
         try {
-            const response = await api.put(`/questions/${id}/edit`, question);
+            const response = await api.put(`/questions/${id}/edit`, question, {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+                },
+              });
+              setSuccessMessage("✅ Question updated!");
+              setTimeout(() => {
+                navigate(`/questions/${id}`);
+              }, 1500);
             setUpdateOptionOne("");
             setUpdateOptionTwo("");
         } catch (error) {
@@ -68,6 +78,7 @@ const EditQuestion = () => {
                 }}>
                 Reset
             </button>
+            {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
         </form>
     )
 };

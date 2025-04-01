@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from "../../api";
 
 
@@ -7,6 +8,8 @@ const CreateQuestion = () => {
     const [optionOne, setOptionOne] = useState("");
     const [optionTwo, setOptionTwo] = useState("");
     const [message, setMessage] = useState("");
+
+    const navigate = useNavigate();
 
     const handleChangeOne = (e) => {
         setOptionOne(e.target.value);
@@ -24,11 +27,21 @@ const CreateQuestion = () => {
           };
    
         try {
-            const response = await api.post('/questions/create', questionData);
+            const response = await api.post('/questions/create', questionData, {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+                },
+              });
             console.log('Question created:', response.data);
+
+            const createdId = response.data._id;
+
             setOptionOne('');
             setOptionTwo('');
             setMessage("Question created successfully!");
+            setTimeout(() => {
+                navigate(`/questions/${createdId}`); 
+              }, 1500);
         } catch (error) {
             console.error('Error creating question:', error);
         };
