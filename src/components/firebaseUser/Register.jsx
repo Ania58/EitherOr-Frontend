@@ -6,6 +6,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from "firebase/auth";
+import { updateProfile } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
 import Spinner from "../common/Spinner";
@@ -20,6 +21,7 @@ function Register() {
   const [loading, setLoading] = useState(false);
   const [isGoogleRegister, setIsGoogleRegister] = useState(false);
   const [isRegistrationComplete, setIsRegistrationComplete] = useState(false);
+  const [displayName, setDisplayName] = useState("");
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
 
@@ -73,6 +75,7 @@ function Register() {
       setLoading(true);
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
+      await updateProfile(user, { displayName });
 
       await sendEmailVerification(user);
 
@@ -127,6 +130,13 @@ function Register() {
         <div className="auth-card">
           <h2 className="auth-title">Register</h2>
           <form onSubmit={handleRegister} className="auth-form">
+          <input
+            type="text"
+            placeholder="Your display name"
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
+            className="auth-input"
+          />
             <input
               type="email"
               placeholder="Email"
