@@ -6,6 +6,7 @@ import EditComment from '../comments/EditComment';
 import DeleteComment from '../comments/DeleteComment';
 import { UserContext } from "../contexts/UserContext";
 import GoBackButton from "../buttons/GoBackButton";
+import Spinner from '../common/Spinner';
 
 
 const QuestionDetails = () => {
@@ -103,7 +104,7 @@ const QuestionDetails = () => {
         }
     };
 
-    if (!question) return <p>Loading...</p>;
+    if (!question) return  <Spinner /> ;
 
     const totalVotes = question.votesOptionOne.length + question.votesOptionTwo.length;
     const percentOptionOne = ((question.votesOptionOne.length / totalVotes) * 100).toFixed(1);

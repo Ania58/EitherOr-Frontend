@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import api from "../../api";
 import QuestionCard from "./QuestionCard";
+import Spinner from "../common/Spinner";
 
 const sortLabels = {
     all: "📋 All Questions",
@@ -57,7 +58,7 @@ const QuestionList = () => {
             </p>
 
             {loading ? (
-                <p>⏳ Loading questions...</p>
+                  <Spinner />
             ) : questions.length === 0 ? (
                 <p>😢 No questions found. Be the first to create one!</p>
             ) : (

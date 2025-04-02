@@ -8,6 +8,7 @@ import {
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
+import Spinner from "../common/Spinner";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -106,71 +107,77 @@ function Register() {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <h2 className="auth-title">Register</h2>
-        <form onSubmit={handleRegister} className="auth-form">
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="auth-input"
-          />
-          <div className="password-container">
+    loading ? (
+      <div className="flex justify-center items-center h-screen">
+        <Spinner />
+      </div>
+    ) : (
+      <div className="auth-container">
+        <div className="auth-card">
+          <h2 className="auth-title">Register</h2>
+          <form onSubmit={handleRegister} className="auth-form">
             <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
               className="auth-input"
             />
-            <button
-              type="button"
-              onClick={() => setShowPassword((prev) => !prev)}
-              className="show-password-button"
-            >
-              {showPassword ? "Hide" : "Show"}
+            <div className="password-container">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="auth-input"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="show-password-button"
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
+            <div className="rules-container">
+              <label>
+                <input
+                  type="checkbox"
+                  checked={acceptRules}
+                  onChange={(e) => setAcceptRules(e.target.checked)}
+                  required
+                />
+                I accept the{" "}
+                <a
+                  href="/rules-and-regulations.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  rules
+                </a>
+                .
+              </label>
+            </div>
+            <button type="submit" className="auth-button" disabled={loading}>
+              {loading ? "Registering..." : "Register"}
+            </button>
+          </form>
+          <div className="google-button-container">
+            <button onClick={handleGoogleRegister} className="google-button">
+              <img
+                src="https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/google.svg"
+                alt="Google Logo"
+              />
+              Register with Google
             </button>
           </div>
-          <div className="rules-container">
-            <label>
-              <input
-                type="checkbox"
-                checked={acceptRules}
-                onChange={(e) => setAcceptRules(e.target.checked)}
-                required
-              />
-              I accept the{" "}
-              <a
-                href="/rules-and-regulations.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                rules
-              </a>
-              .
-            </label>
-          </div>
-          <button type="submit" className="auth-button" disabled={loading}>
-            {loading ? "Registering..." : "Register"}
-          </button>
-        </form>
-        <div className="google-button-container">
-          <button onClick={handleGoogleRegister} className="google-button">
-            <img
-              src="https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/google.svg"
-              alt="Google Logo"
-            />
-            Register with Google
-          </button>
+          {error && <p className="auth-error">{error}</p>}
+          {successMessage && <p className="auth-success">{successMessage}</p>}
         </div>
-        {error && <p className="auth-error">{error}</p>}
-        {successMessage && <p className="auth-success">{successMessage}</p>}
       </div>
-    </div>
+    )
   );
 }
 

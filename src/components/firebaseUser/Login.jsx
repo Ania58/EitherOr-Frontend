@@ -8,18 +8,21 @@ import {
 import { setPersistence, browserLocalPersistence } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
+import Spinner from "../common/Spinner";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext); 
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
       await setPersistence(auth, browserLocalPersistence);
@@ -46,11 +49,14 @@ function Login() {
         "auth/invalid-credential": "Invalid credentials.",
       };
       setError(errorMessages[err.code] || "Login failed. Try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleGoogleLogin = async () => {
     setError("");
+    setLoading(true);
     const provider = new GoogleAuthProvider();
 
     try {
@@ -65,51 +71,55 @@ function Login() {
     } catch (err) {
       console.error("Google login error:", err);
       setError("Google login failed. Try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div style={{ padding: "2rem", maxWidth: "400px", margin: "auto" }}>
       <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          style={{ display: "block", width: "100%", marginBottom: "1rem" }}
-        />
-        <div style={{ position: "relative", marginBottom: "1rem" }}>
+      {loading ? <Spinner /> : (
+        <form onSubmit={handleLogin}>
           <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
-            style={{ width: "100%" }}
+            style={{ display: "block", width: "100%", marginBottom: "1rem" }}
           />
-          <button
-            type="button"
-            onClick={() => setShowPassword((prev) => !prev)}
-            style={{
-              position: "absolute",
-              right: 0,
-              top: 0,
-              height: "100%",
-              background: "transparent",
-              border: "none",
-              cursor: "pointer",
-              padding: "0 1rem",
-            }}
-          >
-            {showPassword ? "Hide" : "Show"}
+          <div style={{ position: "relative", marginBottom: "1rem" }}>
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              style={{ width: "100%" }}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              style={{
+                position: "absolute",
+                right: 0,
+                top: 0,
+                height: "100%",
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                padding: "0 1rem",
+              }}
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
+          </div>
+          <button type="submit" style={{ width: "100%", marginBottom: "1rem" }}>
+            Login
           </button>
-        </div>
-        <button type="submit" style={{ width: "100%", marginBottom: "1rem" }}>
-          Login
-        </button>
-      </form>
+        </form>
+      )}
 
       <button
         onClick={handleGoogleLogin}
