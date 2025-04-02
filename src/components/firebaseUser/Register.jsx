@@ -40,13 +40,19 @@ function Register() {
       await user.reload();
       if (user.emailVerified) {
         clearInterval(interval);
-        setSuccessMessage("✅ Email verified! You can now log in.");
-        navigate("/questions");
+        const token = await user.getIdToken();
+        localStorage.setItem("authToken", token);
+        setUser({ email: user.email, uid: user.uid });
+
+        setSuccessMessage("✅ Email verified! Redirecting...");
+        setTimeout(() => {
+          navigate("/questions");
+        }, 1000);
       }
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [navigate, isRegistrationComplete, isGoogleRegister]);
+  }, [navigate, isRegistrationComplete, isGoogleRegister, setUser]);
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -75,12 +81,17 @@ function Register() {
       setUser({ email: user.email, uid: user.uid });
 
 
-      setSuccessMessage("📩 Registration successful! Please verify your email.");
+      setSuccessMessage("📩 A verification email has been sent to your inbox. Please verify your email. This page will check every few seconds.");
       setIsRegistrationComplete(true);
       setError("");
     } catch (err) {
       console.error("Registration error:", err);
-      setError("❌ " + err.message);
+      const errorMessages = {
+        "auth/email-already-in-use": "⚠️ This email is already registered. If you didn’t verify it, please check your inbox.",
+        "auth/invalid-email": "❗ Invalid email format.",
+        "auth/weak-password": "❗ Password is too weak.",
+      };
+      setError(errorMessages[err.code] || "❌ Registration failed. Try again.");
     } finally {
       setLoading(false);
     }
