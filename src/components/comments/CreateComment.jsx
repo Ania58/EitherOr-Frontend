@@ -2,11 +2,13 @@ import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../api";
 import { UserContext } from "../contexts/UserContext";
+import Spinner from "../common/Spinner";
 
 
 const CreateComment = ({onCommentAdded}) => {
     const { id } = useParams();
     const [ commentText, setCommentText ] = useState("");
+    const [loading, setLoading] = useState(false);
     const { user } = useContext(UserContext); 
 
      useEffect(() => {
@@ -25,6 +27,7 @@ const CreateComment = ({onCommentAdded}) => {
         const commentorId = user?.uid || localStorage.getItem("voterId");
        
         try {
+            setLoading(true);
             const response = await api.post(`/questions/${id}/comments`,
                 {
                     user: commentorId, 
@@ -43,6 +46,8 @@ const CreateComment = ({onCommentAdded}) => {
               }
         } catch (error) {
             console.error("Error adding comment", error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -50,7 +55,7 @@ const CreateComment = ({onCommentAdded}) => {
         <form onSubmit={addComment}>
             <h3>Write Your Comment</h3>
             <input type="text" value={commentText} onChange={handleChange}/>
-            <button type="submit">Post Your Comment</button>
+            <button type="submit" disabled={loading}>{loading ? <Spinner /> :"Post Your Comment"}</button>
         </form>
     );
 };

@@ -2,10 +2,12 @@ import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../api";
 import { UserContext } from "../contexts/UserContext";
+import Spinner from "../common/Spinner";
 
 const DeleteComment = ({commentId, onCommentDeleted, onNotifyDelete}) => {
     const { id } = useParams();
     const [confirming, setConfirming] = useState(false);
+    const [loading, setLoading] = useState(false);
     const { user } = useContext(UserContext);
 
     useEffect(() => {
@@ -20,6 +22,7 @@ const DeleteComment = ({commentId, onCommentDeleted, onNotifyDelete}) => {
     const deleteComment = async (e) => {
         e.preventDefault();
         try {
+          setLoading(true);
            const response = await api.delete(`/questions/${id}/comments`, {
             data: {
                 commentId,
@@ -35,13 +38,21 @@ const DeleteComment = ({commentId, onCommentDeleted, onNotifyDelete}) => {
           setConfirming(false);
         } catch (error) {
             console.error("Error deleting comment");
+        } finally {
+          setLoading(false);
         }
     };
     return confirming ? (
         <div>
-          <p>Are you sure you want to delete your comment?</p>
-          <button onClick={deleteComment}>✅ Yes, delete</button>{" "}
-          <button onClick={() => setConfirming(false)}>❌ Cancel</button>
+          {loading ? (
+            <Spinner />
+          ) : (
+            <>
+              <p>Are you sure you want to delete your comment?</p>
+              <button onClick={deleteComment}>✅ Yes, delete</button>{" "}
+              <button onClick={() => setConfirming(false)}>❌ Cancel</button>
+            </>
+           )}
         </div>
       ) : (
         <button onClick={() => setConfirming(true)}>🗑 Delete</button>
