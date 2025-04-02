@@ -20,6 +20,9 @@ const Header = () => {
                     <li><Link to="/questions">📋 Questions</Link></li>
                     {user ? (
                         <>
+                            <span className="text-sm text-gray-600">
+                                👋 Hello, {user.email}
+                            </span>
                             <li><Link to="/questions/create">➕ Create</Link></li>
                             <li><LogoutButton /></li>
                         </>
