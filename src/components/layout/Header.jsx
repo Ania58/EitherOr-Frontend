@@ -12,31 +12,33 @@ const Header = () => {
     const { user } = useContext(UserContext);
 
     return (
-        <header>
-            <h1>Either Or</h1>
-            <nav>
-                <ul>
-                    <li><Link to="/">🏠 Home</Link></li>
-                    <li><Link to="/questions">📋 Questions</Link></li>
-                    {user ? (
-                        <>
-                            <span className="text-sm text-gray-600">
-                                👋 Hello, {user.displayName || user.email}
-                            </span>
-                            <li><Link to="/questions/create">➕ Create</Link></li>
-                            <li><LogoutButton /></li>
-                        </>
-                    ) : (
-                        <>
-                            <li><Link to="/login">🔐 Login</Link></li>
-                            <li><Link to="/register">📝 Register</Link></li>
-                        </>
-                    )}
-                    <li><Link to="/questions?sortBy=newest" style={{ fontWeight: sortBy === "newest" ? "bold" : "normal" }}>🆕 Newest</Link></li>
-                    <li><Link to="/questions?sortBy=popular" style={{ fontWeight: sortBy === "popular" ? "bold" : "normal" }}>🔥 Popular</Link></li>
-                    <li><Link to="/questions?sortBy=weird" style={{ fontWeight: sortBy === "weird" ? "bold" : "normal" }}>😵‍💫 Weirdest</Link></li>
-                </ul> 
-            </nav>
+        <header className="sticky top-0 bg-white shadow-md p-4 z-50">
+            <div className="flex justify-between items-center max-w-6xl mx-auto">
+                <h1 className="text-2xl font-bold text-green-600">Either Or</h1>
+                <nav>
+                    <ul className="flex gap-4 items-center text-gray-700">
+                        <li className="hover:text-green-600"><Link to="/">🏠 Home</Link></li>
+                        <li className="hover:text-green-600"><Link to="/questions">📋 Questions</Link></li>
+                        {user ? (
+                            <>
+                                <span className="text-sm text-gray-500">
+                                    👋 Hello, {user.displayName || user.email}
+                                </span>
+                                <li><Link to="/questions/create" className="hover:text-green-600">➕ Create</Link></li>
+                                <li><LogoutButton /></li>
+                            </>
+                        ) : (
+                            <>
+                                <li><Link to="/login" className="hover:text-green-600">🔐 Login</Link></li>
+                                <li><Link to="/register" className="hover:text-green-600">📝 Register</Link></li>
+                            </>
+                        )}
+                        <li><Link to="/questions?sortBy=newest" className={`${sortBy === "newest" ? "font-bold text-green-600" : "hover:text-green-600"}`}>🆕 Newest</Link></li>
+                        <li><Link to="/questions?sortBy=popular" className={`${sortBy === "popular" ? "font-bold text-green-600" : "hover:text-green-600"}`}>🔥 Popular</Link></li>
+                        <li><Link to="/questions?sortBy=weird" className={`${sortBy === "weird" ? "font-bold text-green-600" : "hover:text-green-600"}`}>😵‍💫 Weirdest</Link></li>
+                    </ul> 
+                </nav>
+            </div>
         </header>
     )
 };
