@@ -43,19 +43,21 @@ const DeleteComment = ({commentId, onCommentDeleted, onNotifyDelete}) => {
         }
     };
     return confirming ? (
-        <div>
+        <div className="mt-2 space-y-2">
           {loading ? (
             <Spinner />
           ) : (
             <>
-              <p>Are you sure you want to delete your comment?</p>
-              <button onClick={deleteComment}>✅ Yes, delete</button>{" "}
-              <button onClick={() => setConfirming(false)}>❌ Cancel</button>
+              <p className="text-sm text-gray-600">Are you sure you want to delete your comment?</p>
+              <div className="flex gap-2 flex-wrap">
+                <button onClick={deleteComment} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition">✅ Yes, delete</button>{" "}
+                <button onClick={() => setConfirming(false)} className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400 transition">❌ Cancel</button>
+              </div>
             </>
            )}
         </div>
       ) : (
-        <button onClick={() => setConfirming(true)}>🗑 Delete</button>
+        <button onClick={() => setConfirming(true)} className="text-red-500 hover:underline text-sm">🗑 Delete</button>
       );
 };
 
