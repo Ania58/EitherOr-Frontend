@@ -19,7 +19,7 @@ function LogoutButton() {
     }
   };
 
-  return <button onClick={handleLogout}>Logout</button>;
+  return <button onClick={handleLogout} className="text-gray-700 hover:text-red-600 px-2 py-1 transition-colors duration-200 cursor-pointer">Logout</button>;
 }
 
 export default LogoutButton;
