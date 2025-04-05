@@ -49,17 +49,40 @@ const CreateQuestion = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-             <GoBackButton />
-            <h1>Create your Either/Or Question</h1>
-            <h2>Would you rather:</h2>
-            <label>Write your option one:</label>
-            <input type="text" value={optionOne} onChange={handleChangeOne} />
-            <label>Write your option two:</label>
-            <input type="text" value={optionTwo} onChange={handleChangeTwo} />
-            <button type="submit">Create Question</button>
-            {message && <p>{message}</p>}
-        </form>
+        <div className="max-w-xl mx-auto px-4 py-6">
+            <GoBackButton />
+            <h1 className="text-2xl font-bold text-center mb-4">Create Your Either/Or Question</h1>
+            <h2 className="text-lg text-gray-700 text-center mb-6">Would you rather...</h2>
+            <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                    <label className="block text-sm font-medium mb-1">Write your option one:</label>
+                    <input
+                        type="text"
+                        value={optionOne}
+                        onChange={handleChangeOne}
+                        required
+                        className="w-full px-3 py-2 border rounded shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+                    />
+                </div>
+                <div>
+                    <label className="block text-sm font-medium mb-1">Write your option two:</label>
+                    <input
+                        type="text"
+                        value={optionTwo}
+                        onChange={handleChangeTwo}
+                        required
+                        className="w-full px-3 py-2 border rounded shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+                    />
+                </div>
+                <button
+                    type="submit"
+                    className="w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+                >
+                    Create Question
+                </button>
+                {message && <p className="text-center text-green-600 font-medium mt-2">{message}</p>}
+            </form>
+        </div>
     )
 };
 
