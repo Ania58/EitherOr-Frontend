@@ -22,16 +22,22 @@ const MainPage = () => {
         };
     
     return (
-        <>
-            <h1>Try out our Either Or Page</h1>
-            <h2>Have a go and test out your friends. Are they secretely weirdos as you? Find out!</h2>
-            <p>If you aren't sure you are "sane", vote and see how many people think as you!</p>
-            <p>Have great fun!</p>
-            <h2>🎲 Wanna see a random question?</h2>
-            <button onClick={handleSurpriseMe}>Surprise Me</button>
-            <h2>📋 Or browse them all?</h2>
-            <button onClick={handleSeeAll}>See All Questions</button>
-        </>
+        <div className="flex flex-col items-center justify-center min-h-screen px-4 text-center space-y-6 bg-gradient-to-br from-green-100 to-blue-100">
+            <h1 className="text-4xl font-bold text-green-800">Welcome to Either Or </h1>
+            <h2 className="text-2xl text-gray-700 max-w-xl">Have a go and test out your friends. Are they secretely weirdos as you? 🤔</h2>
+            <p className="text-lg text-gray-600 max-w-md">Not sure you're “sane”? Vote and find out how many people think like you!</p>
+            <p className="text-lg text-gray-600">Ready to play? 🎉</p>
+            <div className="space-y-4 mt-6">
+                <h2 className="text-xl font-semibold">🎲 Wanna see a random question?</h2>
+                <button onClick={handleSurpriseMe} className="px-6 py-2 bg-green-500 text-white rounded shadow hover:bg-green-600 transition">
+                    Surprise Me
+                </button>
+                <h2 className="text-xl font-semibold mt-6">📋 Or browse them all?</h2>
+                <button onClick={handleSeeAll} className="px-6 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 transition">
+                    See All Questions
+                </button>
+            </div>
+        </div>
     )
 };
 
