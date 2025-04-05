@@ -111,80 +111,104 @@ const QuestionDetails = () => {
     const percentOptionTwo = ((question.votesOptionTwo.length / totalVotes) * 100).toFixed(1);
 
     return (
-        <div>
+        <div className="max-w-2xl mx-auto px-4 py-6">
              <GoBackButton />
-          <h1>Would you rather...</h1>
-          <p>{question.optionOne} OR {question.optionTwo}</p>
+          <h1 className="text-2xl font-bold text-center mb-4">Would you rather...</h1>
+          <p className="text-lg text-center text-gray-700 mb-6">{question.optionOne} OR {question.optionTwo}</p>
           {!hasVoted ? (
-            <>
-            <button onClick={() => setSelectedOption("optionOne")} className={selectedOption === "optionOne" ? "selected" : ""}>{question.optionOne}</button>
-            <button onClick={() => setSelectedOption("optionTwo")} className={selectedOption === "optionTwo" ? "selected" : ""}>{question.optionTwo}</button>
-            <button onClick={handleVote} disabled={!selectedOption}>Submit Vote</button>
-            </>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-4">
+                <button
+                    onClick={() => setSelectedOption("optionOne")}
+                    className={`w-full sm:w-auto px-4 py-2 rounded border transition font-semibold text-center ${
+                        selectedOption === "optionOne"
+                        ? "bg-green-500 text-white"
+                        : "bg-gray-100 hover:bg-gray-200"
+                    }`}
+                >
+                    {`🅰️ ${question.optionOne}`}
+                </button>
+                <button
+                    onClick={() => setSelectedOption("optionTwo")}
+                    className={`w-full sm:w-auto px-4 py-2 rounded border transition font-semibold text-center ${
+                        selectedOption === "optionTwo"
+                        ? "bg-green-500 text-white"
+                        : "bg-gray-100 hover:bg-gray-200"
+                    }`}
+                    >
+                    {`🅱️ ${question.optionTwo}`}
+                </button>
+                <button
+                    onClick={handleVote}
+                    disabled={!selectedOption}
+                    className="w-full sm:w-auto px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50 hover:bg-blue-600 transition"
+                >
+                    Submit Vote
+                </button>
+            </div>
             ) : (
-                <>
-                    <p>✅ You’ve already voted. Thank you!</p>
+                <div className="text-center mb-6">
+                    <p className="text-green-600 font-semibold mb-2">✅ You’ve already voted. Thank you!</p>
                     {resultsVisible && (
-                        <div>
+                        <div className="space-y-2">
                             <p>You chose: <strong>{question[selectedOption]}</strong></p>
                             <p>{question.optionOne}: {percentOptionOne}% ({question.votesOptionOne.length} votes)</p>
                             <p>{question.optionTwo}: {percentOptionTwo}% ({question.votesOptionTwo.length} votes)</p>
                         </div>
             )}
-                </>
+                </div>
           )}
           {isCreator && (
-            <>
-                <button onClick={handleEdit}>Edit Question</button>
-                <button onClick={handleDelete}>Delete Question</button>
-            </>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+                <button onClick={handleEdit} className="px-4 py-2 bg-yellow-400 text-white rounded hover:bg-yellow-500 transition">Edit Question</button>
+                <button onClick={handleDelete} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition">Delete Question</button>
+            </div>
           )}
           {question && (
-                <>
-                    <p>🌀 Weird Votes: {question.weirdVotes}</p>
+                <div className="text-center mb-6">
+                    <p className="text-purple-600 font-medium">🌀 Weird Votes: {question.weirdVotes}</p>
                     {hasMarkedWeird ? (
-                        <p>😵‍💫 You’ve already marked this question as weird. Thanks for your honesty!</p>
+                        <p className="text-sm text-gray-600 mt-1">😵‍💫 You’ve already marked this question as weird. Thanks for your honesty!</p>
                     ) : (
-                        <button onClick={handleWeirdVote} disabled={hasMarkedWeird}>
+                        <button onClick={handleWeirdVote} disabled={hasMarkedWeird} className="mt-2 px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 disabled:opacity-50 transition">
                         😵‍💫 This is weird
                         </button>
                     )}
-                </>
+                </div>
           )}
-          <div className="comment-section">
+          <div className="comment-section mt-8">
             <CreateComment onCommentAdded={setComments} />
-            <h3>💬 Comments</h3>
+            <h3 className="text-xl font-semibold mt-6 mb-2">💬 Comments</h3>
             {comments.length === 0 ? (
-                <p>😶 No comments yet. Be the first!</p>
+                <p className="text-gray-600">😶 No comments yet. Be the first!</p>
             ) : (
                 <>
-                    {editMessage && <p style={{ color: "green" }}>{editMessage}</p>}
-                    {deleteMessage && <p style={{ color: "red" }}>{deleteMessage}</p>}
-                    <ul>
+                    {editMessage && <p className="text-green-600 text-sm">{editMessage}</p>}
+                    {deleteMessage && <p className="text-red-600 text-sm">{deleteMessage}</p>}
+                    <ul className="space-y-4 mt-4">
                         {comments.map((comment) => {
                             return (
-                                <li key={comment._id}>
-                                    <strong>{comment.name || comment.user}:</strong> {comment.text}
+                                <li key={comment._id} className="bg-gray-50 p-3 rounded shadow-sm">
+                                    <p className="text-sm"><strong>{comment.name || comment.user}:</strong> {comment.text}</p>
                                     {comment.user === currentUserId && (
-                                        <>
-                                        <EditComment
-                                            commentId={comment._id}
-                                            initialText={comment.text}
-                                            onCommentUpdated={setComments}
-                                            onNotifyEdit={() => {
-                                            setEditMessage("✏️ Your comment was updated.");
-                                            setTimeout(() => setEditMessage(""), 3000);
-                                            }}
-                                        />
-                                        <DeleteComment
-                                            commentId={comment._id}
-                                            onCommentDeleted={setComments}
-                                            onNotifyDelete={() => {
-                                            setDeleteMessage("🗑️ Your comment was deleted.");
-                                            setTimeout(() => setDeleteMessage(""), 3000);
-                                            }}
-                                        />
-                                        </>
+                                        <div className="flex gap-2 mt-2">
+                                            <EditComment
+                                                commentId={comment._id}
+                                                initialText={comment.text}
+                                                onCommentUpdated={setComments}
+                                                onNotifyEdit={() => {
+                                                setEditMessage("✏️ Your comment was updated.");
+                                                setTimeout(() => setEditMessage(""), 3000);
+                                                }}
+                                            />
+                                            <DeleteComment
+                                                commentId={comment._id}
+                                                onCommentDeleted={setComments}
+                                                onNotifyDelete={() => {
+                                                setDeleteMessage("🗑️ Your comment was deleted.");
+                                                setTimeout(() => setDeleteMessage(""), 3000);
+                                                }}
+                                            />
+                                        </div>
                                     )}
                                 </li>
                             );
