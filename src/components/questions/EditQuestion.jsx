@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from "../../api";
 import GoBackButton from '../buttons/GoBackButton';
+import Spinner from '../common/Spinner';
 
 const EditQuestion = () => {
     const [ optionOne, setOptionOne ] = useState("");
@@ -9,6 +10,7 @@ const EditQuestion = () => {
     const [ updateOptionOne, setUpdateOptionOne ] = useState("");
     const [ updateOptionTwo, setUpdateOptionTwo ] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const { id } = useParams();
     const navigate = useNavigate();
@@ -40,6 +42,7 @@ const EditQuestion = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
 
         const question = {
             optionOne: updateOptionOne,
@@ -60,28 +63,59 @@ const EditQuestion = () => {
             setUpdateOptionTwo("");
         } catch (error) {
             console.error("Failed to update question", error);
+        } finally {
+            setLoading(false);
         };
     };
 
     return (
-        <form onSubmit={handleSubmit}>
-             <GoBackButton />
-            <h1>Edit your Either/Or Question</h1>
-            <h2>Would you rather:</h2>
-            <label>Edit your option one:</label>
-            <input type="text" value={updateOptionOne} onChange={handleChangeQuestionOne} />
-            <label>Edit your option two:</label>
-            <input type="text" value={updateOptionTwo} onChange={handleChangeQuestionTwo} />
-            <button type="submit">Edit Question</button>
-            <button type="button" 
-                onClick={() => {
-                    setUpdateOptionOne(optionOne);
-                    setUpdateOptionTwo(optionTwo);
-                }}>
-                Reset
-            </button>
-            {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
-        </form>
+        <div className="max-w-xl mx-auto px-4 py-6">
+            <GoBackButton />
+            <h1 className="text-2xl font-bold text-center mb-4">Edit Your Either/Or Question</h1>
+            <h2 className="text-lg text-gray-700 text-center mb-6">Would you rather...</h2>
+            <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                    <label className="block text-sm font-medium mb-1">Edit your option one:</label>
+                    <input
+                        type="text"
+                        value={updateOptionOne}
+                        onChange={handleChangeQuestionOne}
+                        required
+                        className="w-full px-3 py-2 border rounded shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+                    />
+                </div>
+                <div>
+                    <label className="block text-sm font-medium mb-1">Edit your option two:</label>
+                    <input
+                        type="text"
+                        value={updateOptionTwo}
+                        onChange={handleChangeQuestionTwo}
+                        required
+                        className="w-full px-3 py-2 border rounded shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+                    />
+                </div>
+                <div className="flex gap-4">
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="w-full px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 disabled:opacity-50 transition"
+                    >
+                        {loading ? <Spinner /> : "Edit Question"}
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => {
+                        setUpdateOptionOne(optionOne);
+                        setUpdateOptionTwo(optionTwo);
+                        }}
+                        className="w-full px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400 transition"
+                    >
+                        Reset
+                    </button>
+                </div>
+                {successMessage && <p className="text-center text-green-600 font-medium mt-2">{successMessage}</p>}
+            </form>
+        </div>
     )
 };
 
