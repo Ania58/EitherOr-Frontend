@@ -6,13 +6,7 @@ const GoBackButton = () => {
   return (
     <button type="button"
       onClick={() => navigate(-1)}
-      style={{
-        marginBottom: "1rem",
-        padding: "0.5rem 1rem",
-        backgroundColor: "#eee",
-        border: "1px solid #ccc",
-        cursor: "pointer",
-      }}
+      className="mb-4 px-4 py-2 bg-gray-200 border border-gray-400 rounded hover:bg-gray-300 transition-colors duration-200 cursor-pointer"
     >
       ⬅️ Go Back
     </button>
