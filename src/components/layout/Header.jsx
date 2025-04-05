@@ -16,7 +16,7 @@ const Header = () => {
             <div className="flex justify-between items-center max-w-6xl mx-auto">
                 <h1 className="text-2xl font-bold text-green-600">Either Or</h1>
                 <nav>
-                    <ul className="flex gap-4 items-center text-gray-700">
+                    <ul className="flex flex-wrap gap-4 items-center text-gray-700 max-w-full md:max-w-[90vw]">
                         <li className="hover:text-green-600"><Link to="/">🏠 Home</Link></li>
                         <li className="hover:text-green-600"><Link to="/questions">📋 Questions</Link></li>
                         {user ? (
