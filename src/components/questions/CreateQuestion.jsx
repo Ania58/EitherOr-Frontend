@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from "../../api";
 import GoBackButton from '../buttons/GoBackButton';
+import Spinner from '../common/Spinner';
 
 
 const CreateQuestion = () => {
@@ -9,6 +10,7 @@ const CreateQuestion = () => {
     const [optionOne, setOptionOne] = useState("");
     const [optionTwo, setOptionTwo] = useState("");
     const [message, setMessage] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
 
@@ -28,6 +30,7 @@ const CreateQuestion = () => {
           };
    
         try {
+            setLoading(true);
             const response = await api.post('/questions/create', questionData, {
                 headers: {
                   Authorization: `Bearer ${localStorage.getItem("authToken")}`,
@@ -45,6 +48,8 @@ const CreateQuestion = () => {
               }, 1500);
         } catch (error) {
             console.error('Error creating question:', error);
+        } finally {
+            setLoading(false);
         };
     };
 
@@ -76,9 +81,10 @@ const CreateQuestion = () => {
                 </div>
                 <button
                     type="submit"
+                    disabled={loading}
                     className="w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
                 >
-                    Create Question
+                    {loading ? <Spinner /> : "Create Question"}
                 </button>
                 {message && <p className="text-center text-green-600 font-medium mt-2">{message}</p>}
             </form>
