@@ -77,8 +77,9 @@ function Login() {
   };
 
   return (
-    <div style={{ padding: "2rem", maxWidth: "400px", margin: "auto" }}>
-      <h2>Login</h2>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+      <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
       {loading ? <Spinner /> : (
         <form onSubmit={handleLogin}>
           <input
@@ -87,35 +88,26 @@ function Login() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            style={{ display: "block", width: "100%", marginBottom: "1rem" }}
+            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
           />
-          <div style={{ position: "relative", marginBottom: "1rem" }}>
+          <div className="relative">
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              style={{ width: "100%" }}
+               className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
             />
             <button
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
-              style={{
-                position: "absolute",
-                right: 0,
-                top: 0,
-                height: "100%",
-                background: "transparent",
-                border: "none",
-                cursor: "pointer",
-                padding: "0 1rem",
-              }}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-sm text-gray-600 hover:text-gray-800"
             >
               {showPassword ? "Hide" : "Show"}
             </button>
           </div>
-          <button type="submit" style={{ width: "100%", marginBottom: "1rem" }}>
+          <button type="submit"  className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded transition cursor-pointer">
             Login
           </button>
         </form>
@@ -123,19 +115,13 @@ function Login() {
 
       <button
         onClick={handleGoogleLogin}
-        style={{
-          width: "100%",
-          backgroundColor: "#4285F4",
-          color: "#fff",
-          border: "none",
-          padding: "0.5rem",
-          cursor: "pointer",
-        }}
+        className="w-full mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition cursor-pointer"
       >
         Login with Google
       </button>
 
-      {error && <p style={{ color: "red", marginTop: "1rem" }}>{error}</p>}
+      {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
+      </div>
     </div>
   );
 }
