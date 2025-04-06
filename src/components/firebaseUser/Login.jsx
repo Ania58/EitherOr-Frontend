@@ -79,51 +79,63 @@ function Login() {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-      <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
-      {loading ? <Spinner /> : (
-        <form onSubmit={handleLogin}>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
-          />
-          <div className="relative">
+        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+        {loading ? (
+          <Spinner />
+        ) : (
+          <form onSubmit={handleLogin} className="space-y-4">
             <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
-               className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
+              className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
             />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-sm text-gray-600 hover:text-gray-800 cursor-pointer"
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
             <button
-              type="button"
-              onClick={() => setShowPassword((prev) => !prev)}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-sm text-gray-600 hover:text-gray-800"
+              type="submit"
+              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded transition cursor-pointer"
             >
-              {showPassword ? "Hide" : "Show"}
+              Login
             </button>
-          </div>
-          <button type="submit"  className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded transition cursor-pointer">
-            Login
+          </form>
+        )}
+  
+        <div className="mt-4">
+          <button
+            onClick={handleGoogleLogin}
+            className="w-full flex items-center justify-center gap-2 border border-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-100 cursor-pointer"
+          >
+            <img
+              src="https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/google.svg"
+              alt="Google"
+              className="w-5 h-5"
+            />
+            Login with Google
           </button>
-        </form>
-      )}
-
-      <button
-        onClick={handleGoogleLogin}
-        className="w-full mt-4 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition cursor-pointer"
-      >
-        Login with Google
-      </button>
-
-      {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
+        </div>
+  
+        {error && <p className="text-red-500 mt-4 text-center">{error}</p>}
       </div>
     </div>
-  );
+  );  
 }
 
 export default Login;
