@@ -63,7 +63,7 @@ const CreateComment = ({onCommentAdded}) => {
                     placeholder="Type something fun or deep..."
                     className="w-full px-4 py-2 border rounded shadow-sm focus:outline-none focus:ring focus:border-blue-300"
                 />
-                <button type="submit" disabled={loading || commentText.trim() === ""} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50 transition">
+                <button type="submit" disabled={loading || commentText.trim() === ""} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50 transition cursor-pointer">
                     {loading ? <Spinner /> :"Post Your Comment"}
                 </button>
             </div>

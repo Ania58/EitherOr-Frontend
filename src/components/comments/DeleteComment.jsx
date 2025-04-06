@@ -57,7 +57,7 @@ const DeleteComment = ({commentId, onCommentDeleted, onNotifyDelete}) => {
            )}
         </div>
       ) : (
-        <button onClick={() => setConfirming(true)} className="text-red-500 hover:underline text-sm">🗑 Delete</button>
+        <button onClick={() => setConfirming(true)} className="text-red-500 hover:underline text-sm cursor-pointer">🗑 Delete</button>
       );
 };
 
