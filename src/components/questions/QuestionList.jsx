@@ -66,25 +66,30 @@ const QuestionList = () => {
                     {questions.map((question) => (
                     <QuestionCard key={question._id} question={question} />
                     ))}
-                 <div className="pagination">
+                 <div className="flex justify-center items-center mt-6 flex-wrap gap-2">
                     {page > 1 && (
-                    <button onClick={() => handlePageChange(page - 1)} disabled={page === 1}>◀ Previous</button>
+                    <button onClick={() => handlePageChange(page - 1)} disabled={page === 1} className="px-3 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
+                        ◀ Previous
+                    </button>
                     )}
                     {totalPages &&
                         Array.from({ length: totalPages }, (_, i) => i + 1).map((pg) => (
                             <button
                             key={pg}
                             onClick={() => handlePageChange(pg)}
-                            style={{
-                                fontWeight: pg === page ? "bold" : "normal",
-                                margin: "0 5px",
-                            }}
+                            className={`px-3 py-2 rounded ${
+                                pg === page
+                                  ? "bg-orange-400 text-white font-bold cursor-pointer"
+                                  : "bg-gray-100 text-gray-700 hover:bg-gray-200 cursor-pointer"
+                              }`}
                             >
                             {pg}
                             </button>
                     ))}
                     {questions.length === limit && (
-                    <button onClick={() => handlePageChange(page + 1)} disabled={totalPages && page >= totalPages}>Next ▶</button>
+                    <button onClick={() => handlePageChange(page + 1)} disabled={totalPages && page >= totalPages} className="px-3 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
+                        Next ▶
+                    </button>
                     )}
                  </div>
                 </>
