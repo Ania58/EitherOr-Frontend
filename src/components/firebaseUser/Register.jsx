@@ -126,16 +126,15 @@ function Register() {
         <Spinner />
       </div>
     ) : (
-      <div className="auth-container">
-        <div className="auth-card">
-          <h2 className="auth-title">Register</h2>
-          <form onSubmit={handleRegister} className="auth-form">
+      <div className="max-w-md mx-auto mt-10 bg-white p-6 rounded-xl shadow-lg">
+          <h2 className="text-2xl font-semibold mb-6 text-center">Register</h2>
+          <form onSubmit={handleRegister} className="space-y-4">
           <input
             type="text"
             placeholder="Your display name"
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
-            className="auth-input"
+            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
           />
             <input
               type="email"
@@ -143,26 +142,26 @@ function Register() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="auth-input"
+              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
             />
-            <div className="password-container">
+            <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="auth-input"
+                className="w-full p-2 pr-20 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-400"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword((prev) => !prev)}
-                className="show-password-button"
+                className="absolute top-0 right-0 h-full px-3 text-sm text-gray-600 hover:text-black cursor-pointer"
               >
                 {showPassword ? "Hide" : "Show"}
               </button>
             </div>
-            <div className="rules-container">
+            <div className="flex items-center space-x-2 text-sm">
               <label>
                 <input
                   type="checkbox"
@@ -175,28 +174,29 @@ function Register() {
                   href="/rules-and-regulations.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="text-blue-600 underline"
                 >
                   rules
                 </a>
                 .
               </label>
             </div>
-            <button type="submit" className="auth-button" disabled={loading}>
+            <button type="submit" className="w-full bg-orange-400 text-white py-2 rounded hover:bg-orange-500 transition cursor-pointer" disabled={loading}>
               {loading ? "Registering..." : "Register"}
             </button>
           </form>
-          <div className="google-button-container">
-            <button onClick={handleGoogleRegister} className="google-button">
+          <div className="mt-4">
+            <button onClick={handleGoogleRegister} className="w-full flex items-center justify-center gap-2 bg-white text-black border border-gray-300 py-2 rounded hover:bg-gray-100 transition cursor-pointer">
               <img
                 src="https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/google.svg"
                 alt="Google Logo"
+                className="w-5 h-5"
               />
               Register with Google
             </button>
           </div>
-          {error && <p className="auth-error">{error}</p>}
-          {successMessage && <p className="auth-success">{successMessage}</p>}
-        </div>
+          {error && <p className="text-red-500 mt-4 text-sm">{error}</p>}
+          {successMessage && <p className="text-green-600 mt-4 text-sm">{successMessage}</p>}
       </div>
     )
   );
