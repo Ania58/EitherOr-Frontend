@@ -119,7 +119,7 @@ const QuestionDetails = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-4">
                 <button
                     onClick={() => setSelectedOption("optionOne")}
-                    className={`w-full sm:w-auto px-4 py-2 rounded border transition font-semibold text-center ${
+                    className={`w-full sm:w-auto px-4 py-2 rounded border transition font-semibold text-center cursor-pointer ${
                         selectedOption === "optionOne"
                         ? "bg-green-500 text-white"
                         : "bg-gray-100 hover:bg-gray-200"
@@ -129,7 +129,7 @@ const QuestionDetails = () => {
                 </button>
                 <button
                     onClick={() => setSelectedOption("optionTwo")}
-                    className={`w-full sm:w-auto px-4 py-2 rounded border transition font-semibold text-center ${
+                    className={`w-full sm:w-auto px-4 py-2 rounded border transition font-semibold text-center cursor-pointer ${
                         selectedOption === "optionTwo"
                         ? "bg-green-500 text-white"
                         : "bg-gray-100 hover:bg-gray-200"
@@ -140,7 +140,7 @@ const QuestionDetails = () => {
                 <button
                     onClick={handleVote}
                     disabled={!selectedOption}
-                    className="w-full sm:w-auto px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50 hover:bg-blue-600 transition"
+                    className="w-full sm:w-auto px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50 hover:bg-blue-600 transition cursor-pointer"
                 >
                     Submit Vote
                 </button>
@@ -159,8 +159,8 @@ const QuestionDetails = () => {
           )}
           {isCreator && (
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
-                <button onClick={handleEdit} className="px-4 py-2 bg-yellow-400 text-white rounded hover:bg-yellow-500 transition">Edit Question</button>
-                <button onClick={handleDelete} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition">Delete Question</button>
+                <button onClick={handleEdit} className="px-4 py-2 bg-yellow-400 text-white rounded hover:bg-yellow-500 transition cursor-pointer">Edit Question</button>
+                <button onClick={handleDelete} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition cursor-pointer">Delete Question</button>
             </div>
           )}
           {question && (
@@ -169,7 +169,7 @@ const QuestionDetails = () => {
                     {hasMarkedWeird ? (
                         <p className="text-sm text-gray-600 mt-1">😵‍💫 You’ve already marked this question as weird. Thanks for your honesty!</p>
                     ) : (
-                        <button onClick={handleWeirdVote} disabled={hasMarkedWeird} className="mt-2 px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 disabled:opacity-50 transition">
+                        <button onClick={handleWeirdVote} disabled={hasMarkedWeird} className="mt-2 px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 disabled:opacity-50 transition cursor-pointer">
                         😵‍💫 This is weird
                         </button>
                     )}

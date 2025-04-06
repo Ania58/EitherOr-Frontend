@@ -36,14 +36,14 @@ const MainPage = () => {
                   <h2 className="text-xl font-semibold">🎲 Wanna see a random question?</h2>
                   <button
                     onClick={handleSurpriseMe}
-                    className="px-6 py-2 bg-green-500 text-white rounded shadow hover:bg-green-600 transition"
+                    className="px-6 py-2 bg-green-500 text-white rounded shadow hover:bg-green-600 transition cursor-pointer"
                   >
                     Surprise Me
                   </button>
                   <h2 className="text-xl font-semibold mt-6">📋 Or browse them all?</h2>
                   <button
                     onClick={handleSeeAll}
-                    className="px-6 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 transition"
+                    className="px-6 py-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 transition cursor-pointer"
                   >
                     See All Questions
                   </button>
