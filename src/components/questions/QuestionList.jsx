@@ -92,6 +92,9 @@ const QuestionList = () => {
                     </button>
                     )}
                  </div>
+                 <p className="text-sm text-gray-500 text-center mt-4">
+                    Page {page} of {totalPages}
+                 </p>
                 </>
             )}
         </div>
